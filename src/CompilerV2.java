@@ -3,6 +3,13 @@ import java.util.concurrent.BlockingQueue;
 
 public class CompilerV2 {
     public int count;
+
+    String output;
+
+    public static final String PREFIX = "local[";
+    public static final String POSTFIX = "]";
+    public static final String SEMICO = ";";
+
     public static final String[] RESERVED_WORDS = {
             "int", "char", "if", "else", "while", "for", "break", "continue", "return", "true", "false", "switch", "case", "default"
     };
@@ -26,6 +33,8 @@ public class CompilerV2 {
         this.ops = new Stack<>();
 
         this.exp = new Stack<>();
+
+        this.output = "";
 
     }
 
@@ -292,9 +301,12 @@ public class CompilerV2 {
         String res = "";
         consumeSpace();
         if(peek() != '"'){
-            res += parseTerm();
+
+            parseTerm();
             consumeSpace();
-            res += parseExpressionTail();
+            parseExpressionTail();
+
+            return exp.peek();
         }else{
             res += parseString();
         }
@@ -305,12 +317,29 @@ public class CompilerV2 {
         char c = peek();
         String result = "";
         if( c == '+' || c == '-'){
-            result += " "+c+" ";
+
+
+            result += c;
+            ops.push(c);
             cursor ++;
             consumeSpace();
-            result += parseTerm();
-            result += parseExpressionTail();
-            return result;
+
+            String term = parseTerm();
+            String right = exp.pop();
+            String left = exp.pop();
+
+            String notation = PREFIX + count++ + POSTFIX;
+            exp.push(notation);
+            char tok = ops.pop();
+            System.out.println(notation + " = " + left + " " + tok + " " + right +";");
+            output += notation + " = " + left + " " + tok + " " + right +";\n";
+            String tail = parseExpressionTail();
+//            exp.push(term);
+//            exp.push(tail);
+
+
+            return notation;
+
         }else{
             return "";
         }
@@ -400,13 +429,15 @@ public class CompilerV2 {
     public String parseTerm() throws Exception{
 
         String head = parseFactor();
+
         String tail = parseTermTail();
 
+
+        return exp.peek();
 //        String output = "local[" + count++ +"]";
 //        System.out.println(output + " = " + exp.pop() + " " + stack.pop() + " " + exp.pop()+";");
 //        exp.push(output);
 
-        return "";
     }
 
     public String parseTermTail() throws Exception{
@@ -417,18 +448,19 @@ public class CompilerV2 {
             ops.push(c);
             cursor ++;
             String factor = parseFactor();
-//            System.out.println("log: " + factor);
-            result += parseTermTail();
 
-            String res = "local["+count +"]";
+            String right = exp.pop();
+            String left = exp.pop();
+
+            String equationleft = PREFIX + count++ + POSTFIX;
+            exp.push(equationleft);
+            char tok = ops.pop();
+            System.out.println(equationleft + " = " + left + " " + tok + " " + right +";");
+            output += equationleft + " = " + left + " " + tok + " " + right +";\n";
+            String tail = parseTermTail();
 
 
-//            String left = exp.pop();
-//           String right = exp.pop();
-//            System.out.println(res + " = " + left + " " + ops.pop()+ " " + right+";");
-            exp.push(res);
-
-            return res;
+            return equationleft;
         }else{
 //            String res = "local["+count++ +"]";
 //            System.out.println(res + " = " + exp.pop() + " " + stack.pop()+ " " + exp.pop()+";");
@@ -479,10 +511,11 @@ public class CompilerV2 {
 
 
 //            return res;
-            String output = "local["+ count++ +"]";
-            exp.push(output);
-            System.out.println( output + " = " + res+";");
-            return output;
+            String notation = "local["+ count++ +"]";
+            exp.push(notation);
+            System.out.println( notation + " = " + res+";");
+            this.output += notation + " = " + res+";\n";
+            return notation;
 
         }else if(isLetter(c)){
 
@@ -679,28 +712,23 @@ public class CompilerV2 {
     public static void main(String[] args) {
 
         int[] local = new int[1000];
-        int s = 0;
 
-        String input = "7/6*5/2";
+
+        String input = "(1+2)*3/(9-6)+(5-2)";
         System.out.println(input+"\n");
 
         CompilerV2 compiler = new CompilerV2(input);
 
+
         try {
-            String res = compiler.parseTerm();
+            compiler.parseExpression();
+
+//            System.out.println("\n\n"+compiler.output);
 
         }catch(Exception e){
             System.out.println("Throw expcetion: " + e.getMessage());
         }
 
-        local[0] = 7;
-        local[1] = 6;
-        local[2] = 5;
-        local[3] = 2;
-        local[4] = local[0] / local[1];
-        local[5] = local[2] * local[3];
-        local[6] = local[4] / local[5];
-        s = local[6];
-        System.out.println(s);
+
     }
 }
