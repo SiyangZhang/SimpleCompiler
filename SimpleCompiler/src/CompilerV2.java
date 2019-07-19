@@ -763,7 +763,7 @@ public class CompilerV2 {
 
             return head;
         }
-
+//        System.out.println(exp.peek());
         return exp.peek();
 //        String output = "local[" + count++ +"]";
 //        System.out.println(output + " = " + exp.pop() + " " + stack.pop() + " " + exp.pop()+";");
@@ -774,14 +774,21 @@ public class CompilerV2 {
     public String parseTermTail() throws Exception{
         char c = peek();
         String result = "";
+
         if(c == '*' || c == '/' || c == '%'){
+
             result += c;
             ops.push(c);
             cursor ++;
             String factor = parseFactor();
 
             if(cursor == input.length()-1){
-                return factor;
+                String right = exp.pop();
+                String left = exp.peek();
+                char tok = ops.pop();
+                String equationleft = PREFIX + count++ + POSTFIX;
+                output += equationleft + " = " + left + " " + tok + " " + right +";\n";
+                return equationleft;
             }
             String right = exp.pop();
             String left = exp.pop();
@@ -1082,6 +1089,7 @@ public class CompilerV2 {
 
             String input2 = "2*(1+3)";
         CompilerV2 compiler = new CompilerV2(input2);
+
 
         System.out.println(input2);
 
