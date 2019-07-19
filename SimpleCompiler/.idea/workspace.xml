@@ -17,8 +17,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MyCompiler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-434">
-              <caret line="76" column="18" selection-start-line="76" selection-start-column="18" selection-end-line="76" selection-end-column="18" />
+            <state relative-caret-position="20">
+              <caret line="71" column="22" selection-start-line="71" selection-start-column="22" selection-end-line="71" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#16101#16102#0" expanded="true" />
@@ -33,14 +33,14 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CompilerV2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1014">
-              <caret line="265" selection-start-line="265" selection-end-line="265" />
+            <state relative-caret-position="366">
+              <caret line="626" column="41" selection-start-line="626" selection-start-column="41" selection-end-line="626" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#26181#26182#0" expanded="true" />
-                <element signature="e#26253#26254#0" expanded="true" />
-                <element signature="e#26429#26430#0" expanded="true" />
-                <element signature="e#26470#26471#0" expanded="true" />
+                <element signature="e#27825#27826#0" expanded="true" />
+                <element signature="e#27897#27898#0" expanded="true" />
+                <element signature="e#28073#28074#0" expanded="true" />
+                <element signature="e#28114#28115#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -88,8 +88,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>while</find>
-      <find>parsemeta</find>
       <find>onevardeclar</find>
       <find>parseParameter</find>
       <find>parseSingle</find>
@@ -101,19 +99,25 @@
       <find>parseTerm</find>
       <find>parseTermTail</find>
       <find>parseExpressionTail</find>
-      <find>parseExpression</find>
       <find>parseFactor</find>
-      <find>System.out.println</find>
-      <find>parseStatement</find>
       <find>local</find>
       <find>returntype</find>
       <find>parseFunction</find>
       <find>&quot;void&quot;</find>
       <find>parseType</find>
       <find>globalCount</find>
-      <find>MisMatchedException</find>
       <find>if(inGl</find>
       <find>if(in</find>
+      <find>System.out.println</find>
+      <find>output</find>
+      <find>match(';')</find>
+      <find>MisMatchedException</find>
+      <find>parseStatement</find>
+      <find>parseStatement()</find>
+      <find>match(';</find>
+      <find>typewrong</find>
+      <find>parseExpression</find>
+      <find>output +=</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -127,7 +131,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="260" />
     <option name="y" value="20" />
     <option name="width" value="1400" />
@@ -138,8 +142,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -159,7 +163,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CFGCalculator" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -212,10 +216,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10139485" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10246781" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -270,8 +274,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/MyCompiler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-434">
-          <caret line="76" column="18" selection-start-line="76" selection-start-column="18" selection-end-line="76" selection-end-column="18" />
+        <state relative-caret-position="20">
+          <caret line="71" column="22" selection-start-line="71" selection-start-column="22" selection-end-line="71" selection-end-column="22" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#16101#16102#0" expanded="true" />
@@ -284,14 +288,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CompilerV2.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1014">
-          <caret line="265" selection-start-line="265" selection-end-line="265" />
+        <state relative-caret-position="366">
+          <caret line="626" column="41" selection-start-line="626" selection-start-column="41" selection-end-line="626" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#26181#26182#0" expanded="true" />
-            <element signature="e#26253#26254#0" expanded="true" />
-            <element signature="e#26429#26430#0" expanded="true" />
-            <element signature="e#26470#26471#0" expanded="true" />
+            <element signature="e#27825#27826#0" expanded="true" />
+            <element signature="e#27897#27898#0" expanded="true" />
+            <element signature="e#28073#28074#0" expanded="true" />
+            <element signature="e#28114#28115#0" expanded="true" />
           </folding>
         </state>
       </provider>

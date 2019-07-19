@@ -76,9 +76,11 @@ public class CompilerV2 {
         String result = "";
         String meta = parseMetaStatement() + "\n";
         String vars = parseVariableDeclaration() + "\n";
+
         String funcs = parseFunctionDeclaration();
 
         result += meta + vars + funcs;
+        output += result;
         return result;
     }
 
@@ -128,12 +130,17 @@ public class CompilerV2 {
             }
         }
 //        System.out.println(result);
+
         if(inGlobal){
-            return "int " + GLOBALPRE + (globalCount) + POSTFIX+";";
+
+            result =  "int " + GLOBALPRE + (globalCount) + POSTFIX+";";
         }else{
 
-            return "int " + PREFIX + (count) + POSTFIX+";";
+            result = "int " + PREFIX + (count) + POSTFIX+";";
         }
+
+
+        return result;
 
     }
 
@@ -198,8 +205,10 @@ public class CompilerV2 {
             if(peek() == ' ' || peek() == '\n' || peek() == '\t'){
                 return result;
             }
+
             throw new TypeMismatchException("UnsupportedTypeException.");
         }else{
+//            System.out.println("here2:\n" + input.substring(0,cursor) + "\nend here 2");
             throw new TypeMismatchException("UnsupportedTypeException.");
         }
     }
@@ -245,6 +254,7 @@ public class CompilerV2 {
     }
 
     public String parseStatement() throws Exception,TypeMismatchException{
+
         String result = "";
         String here = input.substring(cursor);
         if(here.startsWith("if")){
@@ -258,6 +268,7 @@ public class CompilerV2 {
         }else if(here.startsWith("return")){
             result += parseReturnStatement();
         }else{
+
             int now = cursor;
             String typewrong = "UnsupportedTypeException.";
             String usereserved = "Cannot use a reserved word as variable name.";
@@ -268,13 +279,33 @@ public class CompilerV2 {
                 cursor = now;
                 result += parseAssignment();
             }catch(TypeMismatchException e){
+
                 if(e.getMessage().equals(typewrong)){
                     cursor = now;
-                    result += parseGeneralFunctionCall();
+                    result += parseToken();
+                    consumeSpace();
+                    if(peek() == '('){
+                        cursor = now;
+                        result += parseGeneralFunctionCall();
+
+                    }else{
+                        cursor = now;
+                        System.out.println("assignment  asd");
+                        result += parseAssignment();
+                    }
+
                 }
             }
 
         }
+
+        consumeSpace();
+        if(peek() == '}'){
+            cursor -= 2;
+        }
+        System.out.println("peek = " + peek());
+        result += match(';');
+
         return result;
     }
 
@@ -283,20 +314,33 @@ public class CompilerV2 {
         consumeSpace();
         res += parseVariableDeclaration() + "\n        ";
         consumeSpace();
-        res += parseStatement() + "\n\t";
+
+        while(peek() != '}'){
+
+            res += parseStatement() + "\n\t";
+//            System.out.println("parse statement list");
+            consumeSpace();
+        }
+
+
         consumeSpace();
-        res += parseStatementListTail();
+
+//        res += parseStatementListTail();
+
         return res;
     }
 
     public String parseStatementListTail() throws Exception{
         String res = "";
         consumeSpace();
-        if(peek() != ')' && peek() != '}' && peek() != ']'){
+        while(peek() != '}'){
+
             res += parseStatement() + "\n\t";
             consumeSpace();
             res += parseStatementListTail();
+            consumeSpace();
         }
+
         return res;
     }
 
@@ -307,6 +351,7 @@ public class CompilerV2 {
         consumeSpace();
         res += parseStatementList();
         consumeSpace();
+//        System.out.println("block statements");
         res += "\n"+match('}')+"\n";
         return res;
     }
@@ -316,7 +361,7 @@ public class CompilerV2 {
         String result = "";
 
         if(isLegal(peek())){
-            result += parseToken() + " ";
+            result += varpos.get(parseToken()) + " ";
             consumeSpace();
             if(peek() == '=') {
                 result += match('=') + " ";
@@ -345,12 +390,13 @@ public class CompilerV2 {
                 throw new Exception("Wrong Assignment.");
             }
         }
-
-
+//        result += match(';');
+//        System.out.println(result);
         return result;
     }
 
     public String parseGeneralFunctionCall() throws Exception{
+//        System.out.println("general function call");
         String res = "";
         consumeSpace();
         res += parseToken();
@@ -361,7 +407,11 @@ public class CompilerV2 {
         consumeSpace();
         res += match(')');
         consumeSpace();
+
         res += match(';');
+//        System.out.println(res);
+        consumeSpace();
+
         return res;
     }
 
@@ -499,8 +549,12 @@ public class CompilerV2 {
             consumeSpace();
             String left = match('(')+"";
             consumeSpace();
-            String paramlist = parseParamList();
-            consumeSpace();
+            String paramlist = "";
+            if(peek() != ')'){
+                paramlist += parseParamList();
+                consumeSpace();
+            }
+
             String right = match(')') + "";
             consumeSpace();
             String block = parseBlockStatements();
@@ -570,7 +624,7 @@ public class CompilerV2 {
             consumeSpace();
 
             String tail = parseExpressionTail();
-
+            System.out.println(exp.peek());
             if(tail.equals("")){
                 return head;
             }
@@ -578,6 +632,7 @@ public class CompilerV2 {
         }else{
             res += parseString();
         }
+
         return res;
     }
 
@@ -599,7 +654,7 @@ public class CompilerV2 {
             String notation = PREFIX + count++ + POSTFIX;
             exp.push(notation);
             char tok = ops.pop();
-            System.out.println(notation + " = " + left + " " + tok + " " + right +";");
+            //System.out.println(notation + " = " + left + " " + tok + " " + right +";");
             output += notation + " = " + left + " " + tok + " " + right +";\n";
             String tail = parseExpressionTail();
 //            exp.push(term);
@@ -734,7 +789,7 @@ public class CompilerV2 {
             String equationleft = PREFIX + count++ + POSTFIX;
             exp.push(equationleft);
             char tok = ops.pop();
-            System.out.println(equationleft + " = " + left + " " + tok + " " + right +";");
+            //System.out.println(equationleft + " = " + left + " " + tok + " " + right +";");
             output += equationleft + " = " + left + " " + tok + " " + right +";\n";
             String tail = parseTermTail();
 
@@ -793,8 +848,8 @@ public class CompilerV2 {
 //            return res;
             String notation = PREFIX+ count++ + POSTFIX;
             exp.push(notation);
-            System.out.println( notation + " = " + res+";");
-            this.output += notation + " = " + res+";\n";
+            //System.out.println( notation + " = " + res+";");
+            output += notation + " = " + res+";\n";
             return notation;
 
         }else if(isLetter(c)){
@@ -864,6 +919,7 @@ public class CompilerV2 {
             result += peek();
             cursor++;
         }else{
+            System.out.println(input.substring(0,cursor));
             throw new Exception("TokenFormatException");
         }
         while(isLegal(peek()) && cursor < input.length()){
@@ -873,6 +929,7 @@ public class CompilerV2 {
         if(isReserved(result)){
             throw new Exception("Cannot use a reserved word as variable name.");
         }
+
         return result;
     }
 
@@ -892,6 +949,7 @@ public class CompilerV2 {
             }
 
         }
+//        output+=result;
         return result;
     }
 
@@ -937,7 +995,7 @@ public class CompilerV2 {
         }
         consumeSpace();
 
-
+//        output+=result;
         return result;
     }
 
@@ -949,6 +1007,7 @@ public class CompilerV2 {
             result += freeMatch();
         }
         result += match('"');
+        output += result;
         return result;
     }
 
@@ -957,6 +1016,7 @@ public class CompilerV2 {
             cursor ++;
             return c+"";
         }else{
+//            System.out.println(output);
             System.out.println(input.substring(0,cursor));
             throw new Exception("MisMatchedException: expect "+c+", but see "+peek()+".");
         }
@@ -1012,6 +1072,7 @@ public class CompilerV2 {
                 "\tint v2;\n" +
                 "\tint v3;\n" +
                 "\tv3 = 5+6-7;\n" +
+                "\tv2 = 1*(2+3);\n" +
                 "\tprintf(\"%s%n\",v3);\n" +
                 "}\n" +
                 "\n" +
@@ -1019,13 +1080,16 @@ public class CompilerV2 {
                 "\tglobalname = 100;\n" +
                 "}";
 
+            String input2 = "2*(1+3)";
+        CompilerV2 compiler = new CompilerV2(input2);
 
-        CompilerV2 compiler = new CompilerV2(input);
-
+        System.out.println(input2);
 
 
         try {
-            System.out.println("\n------------------------------------------\n"+compiler.parseProgram());
+            String str = compiler.parseExpression();
+            String output = compiler.output;
+            System.out.println("\n------------------------------------------\n"+output);
 
 
 
