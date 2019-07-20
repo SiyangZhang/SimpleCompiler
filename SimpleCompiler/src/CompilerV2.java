@@ -75,12 +75,13 @@ public class CompilerV2 {
     public String parseProgram() throws Exception{
         String result = "";
         String meta = parseMetaStatement() + "\n";
+        output += meta;
         String vars = parseVariableDeclaration() + "\n";
-
+        output += vars;
         String funcs = parseFunctionDeclaration();
+        output += funcs;
 
-        result += meta + vars + funcs;
-        output += result;
+        output += "";
         return result;
     }
 
@@ -282,7 +283,7 @@ public class CompilerV2 {
 
                 if(e.getMessage().equals(typewrong)){
                     cursor = now;
-                    result += parseToken();
+                    result += varpos.get(parseToken());
                     consumeSpace();
                     if(peek() == '('){
                         cursor = now;
@@ -655,7 +656,7 @@ public class CompilerV2 {
             exp.push(notation);
             char tok = ops.pop();
             //System.out.println(notation + " = " + left + " " + tok + " " + right +";");
-            output += notation + " = " + left + " " + tok + " " + right +";\n";
+//            output += notation + " = " + left + " " + tok + " " + right +";\n";
             String tail = parseExpressionTail();
 //            exp.push(term);
 //            exp.push(tail);
@@ -787,7 +788,7 @@ public class CompilerV2 {
                 String left = exp.peek();
                 char tok = ops.pop();
                 String equationleft = PREFIX + count++ + POSTFIX;
-                output += equationleft + " = " + left + " " + tok + " " + right +";\n";
+//                output += equationleft + " = " + left + " " + tok + " " + right +";\n";
                 return equationleft;
             }
             String right = exp.pop();
@@ -856,7 +857,7 @@ public class CompilerV2 {
             String notation = PREFIX+ count++ + POSTFIX;
             exp.push(notation);
             //System.out.println( notation + " = " + res+";");
-            output += notation + " = " + res+";\n";
+//            output += notation + " = " + res+";\n";
             return notation;
 
         }else if(isLetter(c)){
@@ -1088,14 +1089,14 @@ public class CompilerV2 {
                 "}";
 
             String input2 = "2*(1+3)";
-        CompilerV2 compiler = new CompilerV2(input2);
+        CompilerV2 compiler = new CompilerV2(input);
 
 
-        System.out.println(input2);
+        System.out.println(input);
 
 
         try {
-            String str = compiler.parseExpression();
+            String str = compiler.parseProgram();
             String output = compiler.output;
             System.out.println("\n------------------------------------------\n"+output);
 
