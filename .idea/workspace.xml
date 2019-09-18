@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2df9a70f-5554-45c4-842c-a1b23e0e29f2" name="Default Changelist" comment="" />
+    <list default="true" id="2df9a70f-5554-45c4-842c-a1b23e0e29f2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CompilerV2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/CompilerV2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MyCompiler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MyCompiler.java" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,60 +20,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/MyCompiler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8020">
-              <caret line="403" column="38" selection-start-line="403" selection-start-column="38" selection-end-line="403" selection-end-column="38" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/CompilerV2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="20">
-              <caret line="926" column="46" selection-start-line="926" selection-start-column="46" selection-end-line="926" selection-end-column="46" />
+            <state relative-caret-position="346">
+              <caret line="758" lean-forward="true" selection-start-line="758" selection-end-line="758" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#23399#23400#0" expanded="true" />
-                <element signature="e#23471#23472#0" expanded="true" />
-                <element signature="e#23647#23648#0" expanded="true" />
-                <element signature="e#23688#23689#0" expanded="true" />
+                <element signature="e#22285#22286#0" expanded="true" />
+                <element signature="e#22357#22358#0" expanded="true" />
+                <element signature="e#22533#22534#0" expanded="true" />
+                <element signature="e#22574#22575#0" expanded="true" />
+                <element signature="e#22684#22685#0" expanded="true" />
+                <element signature="e#22720#22721#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/MyQueue.java">
+        <entry file="file://$PROJECT_DIR$/src/test.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="10" column="5" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/PredictTable.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/PredictEnum.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="7" column="89" selection-start-line="7" selection-start-column="89" selection-end-line="7" selection-end-column="89" />
+            <state>
+              <caret column="31" lean-forward="true" selection-start-column="31" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -84,8 +59,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>while</find>
-      <find>parsemeta</find>
       <find>onevardeclar</find>
       <find>parseParameter</find>
       <find>parseSingle</find>
@@ -98,10 +71,28 @@
       <find>parseTermTail</find>
       <find>parseExpressionTail</find>
       <find>parseExpression</find>
-      <find>parseFactor</find>
+      <find>consumeSpace</find>
       <find>System.out.println</find>
+      <find>local</find>
+      <find>match(</find>
+      <find>cursor ++</find>
+      <find>match</find>
+      <find>free</find>
+      <find>ju</find>
+      <find>jump</find>
+      <find>parseNumber</find>
+      <find>generalFunctionCall</find>
+      <find>parseGeneralFunctionCall</find>
       <find>parseStatement</find>
+      <find>cursor++</find>
+      <find>parseFac</find>
+      <find>parseAssignment</find>
+      <find>parseFactor</find>
+      <find>exp.push</find>
     </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -110,6 +101,7 @@
         <option value="$PROJECT_DIR$/src/PredictTable.java" />
         <option value="$PROJECT_DIR$/src/MyQueue.java" />
         <option value="$PROJECT_DIR$/src/MyCompiler.java" />
+        <option value="$PROJECT_DIR$/src/test.txt" />
         <option value="$PROJECT_DIR$/src/CompilerV2.java" />
       </list>
     </option>
@@ -125,8 +117,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -143,10 +133,13 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CFGCalculator" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -202,7 +195,7 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13572961" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13733906" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -211,7 +204,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.33666667" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.33666667" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -231,16 +224,6 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/MyCompiler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8020">
-          <caret line="403" column="38" selection-start-line="403" selection-start-column="38" selection-end-line="403" selection-end-column="38" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/MyQueue.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -250,7 +233,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/PredictTable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
+        <state relative-caret-position="499">
           <caret line="28" selection-start-line="28" selection-end-line="28" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -265,16 +248,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/CompilerV2.java">
+    <entry file="file://$PROJECT_DIR$/src/MyCompiler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20">
-          <caret line="926" column="46" selection-start-line="926" selection-start-column="46" selection-end-line="926" selection-end-column="46" />
+        <state relative-caret-position="-702">
+          <caret line="627" column="46" lean-forward="true" selection-start-line="627" selection-start-column="46" selection-end-line="627" selection-end-column="46" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#23399#23400#0" expanded="true" />
-            <element signature="e#23471#23472#0" expanded="true" />
-            <element signature="e#23647#23648#0" expanded="true" />
-            <element signature="e#23688#23689#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SimpleCompiler/src/CompilerV2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="289" column="34" selection-start-line="289" selection-start-column="34" selection-end-line="289" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="31" lean-forward="true" selection-start-column="31" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/CompilerV2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="758" lean-forward="true" selection-start-line="758" selection-end-line="758" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#22285#22286#0" expanded="true" />
+            <element signature="e#22357#22358#0" expanded="true" />
+            <element signature="e#22533#22534#0" expanded="true" />
+            <element signature="e#22574#22575#0" expanded="true" />
+            <element signature="e#22684#22685#0" expanded="true" />
+            <element signature="e#22720#22721#0" expanded="true" />
           </folding>
         </state>
       </provider>

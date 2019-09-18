@@ -1,3 +1,6 @@
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -19,6 +22,8 @@ public class MyCompiler {
     Stack<Character> stack;
     Stack<String> exp;
 
+    boolean jumpWhiteSpace;
+
     public MyCompiler(String input){
         this.input = input+EOF;
         this.cursor = 0;
@@ -28,6 +33,7 @@ public class MyCompiler {
         stack.push('$');
         this.exp = new Stack<>();
         exp.push("base");
+        jumpWhiteSpace = true;
     }
 
 
@@ -56,26 +62,26 @@ public class MyCompiler {
         String result = "";
         result += parseType() + " ";
 
-        consumeSpace();
+
 
         result += parseToken();
 
-        consumeSpace();
+
         if(peek() == '='){
             result += " "+match('=') + " ";
 
-            consumeSpace();;
+            ;
             result += parseExpression();
         }
 
 
-            result += match(';');
+        result += match(';');
 
         return result;
     }
 
     public String parseType() throws Exception{
-        consumeSpace();
+
         String result = "";
         String here = input.substring(cursor);
         if(here.startsWith("int") || here.startsWith("char")){
@@ -88,7 +94,7 @@ public class MyCompiler {
                 cursor += 3;
             }
 
-            consumeSpace();
+
 
             if(peek() == '*'){
                 while(peek() == '*'){
@@ -120,31 +126,31 @@ public class MyCompiler {
     }
 
     public String parseParameter() throws Exception{
-        consumeSpace();
+
         String res = "";
         res += parseType() + " ";
-        consumeSpace();
+
         res += parseToken();
         return res;
     }
 
     public String parseParamList() throws Exception{
         String res = "";
-        consumeSpace();
+
         res += parseParameter();
-        consumeSpace();
+
         res += parseParamListTail();
         return res;
     }
 
     public String parseParamListTail() throws Exception{
         String res = "";
-        consumeSpace();
+
         if(peek() == ',') {
             res += match(',') + " ";
-            consumeSpace();
+
             res += parseParameter();
-            consumeSpace();
+
             res += parseParamListTail();
         }
         return res;
@@ -161,44 +167,44 @@ public class MyCompiler {
 
     public String parseStatementList() throws Exception{
         String res = "\t";
-        consumeSpace();
+
         res += parseStatement() + "\n\t";
-        consumeSpace();
+
         res += parseStatementListTail();
         return res;
     }
 
     public String parseStatementListTail() throws Exception{
         String res = "";
-        consumeSpace();
+
         if(peek() != ')' && peek() != '}' && peek() != ']'){
             res += parseStatement() + "\n\t";
-            consumeSpace();
+
             res += parseStatementListTail();
         }
         return res;
     }
 
     public String parseBlockStatements() throws Exception{
-        consumeSpace();
+
         String res = "";
         res += match('{') + "\n\t";
-        consumeSpace();
+
         res += parseStatementList();
-        consumeSpace();
+
         res += match('}')+"\n";
         return res;
     }
 
     public String parseAssignment() throws Exception{
-        consumeSpace();
+
         String result = "";
         result += parseToken() + " ";
-        consumeSpace();
+
         result += match('=') + " ";
-        consumeSpace();
+
         result += parseExpression();
-        consumeSpace();
+
         result += match(';');
 
 
@@ -208,9 +214,9 @@ public class MyCompiler {
 
     public String parseGeneralFunctionCall() throws Exception{
         String res = "";
-        consumeSpace();
+
         res += parseFactor();
-        consumeSpace();
+
         res += match(';');
         return res;
     }
@@ -225,9 +231,9 @@ public class MyCompiler {
 
     public String parseIfStatement() throws Exception{
         String result = "";
-        consumeSpace();
+
         result += parseReservedWord();
-        consumeSpace();
+
 
         return result;
     }
@@ -245,7 +251,7 @@ public class MyCompiler {
 
 
     public String parseMetaStatement() throws Exception{
-        consumeSpace();
+
 
         String result = "";
         char c = peek();
@@ -291,10 +297,10 @@ public class MyCompiler {
 
     public String parseExpression() throws Exception{
         String res = "";
-        consumeSpace();
+
         if(peek() != '"'){
             res += parseTerm();
-            consumeSpace();
+
             res += parseExpressionTail();
         }else{
             res += parseString();
@@ -308,7 +314,7 @@ public class MyCompiler {
         if( c == '+' || c == '-'){
             result += " "+c+" ";
             cursor ++;
-            consumeSpace();
+
             result += parseTerm();
             result += parseExpressionTail();
             return result;
@@ -319,7 +325,7 @@ public class MyCompiler {
 
     public String parseConditionalExpression() throws Exception{
         String res = "";
-        consumeSpace();
+
         if(peek() == '!'){
             res += match('!');
             res += parseConditionalExpression();
@@ -334,7 +340,7 @@ public class MyCompiler {
 
     public String parseConditionOp(){
         String res = "";
-        consumeSpace();
+
         String here = input.substring(cursor);
         for(int i = 0; i < COND_OPS.length; i++){
             String op = COND_OPS[i];
@@ -349,7 +355,7 @@ public class MyCompiler {
 
     public String parseConditionalExpressionTail() throws Exception{
         String res = "";
-        consumeSpace();
+
 
         String here = input.substring(cursor);
         if(here.startsWith("&&")){
@@ -364,9 +370,9 @@ public class MyCompiler {
         }else if(here.startsWith(" |")){
             cursor += 1;
         }
-        consumeSpace();
+
         res += parseFactor();
-        consumeSpace();
+
         res += parseConditionalExpressionTail();
 
         return res;
@@ -376,23 +382,23 @@ public class MyCompiler {
 
     public String parseExpressionList() throws Exception{
         String res = "";
-        consumeSpace();
 
-            res += parseExpression();
-            consumeSpace();
-            res += parseExpressionListTail();
+
+        res += parseExpression();
+
+        res += parseExpressionListTail();
 
         return res;
     }
 
     public String parseExpressionListTail() throws Exception{
         String res = "";
-        consumeSpace();
+
         if(peek() == ','){
             res += match(',') + " ";
-            consumeSpace();
+
             res += parseExpression();
-            consumeSpace();
+
             res += parseExpressionListTail();
         }
         return res;
@@ -424,41 +430,41 @@ public class MyCompiler {
     }
 
     public String parseSingleCondition() throws Exception{
-        consumeSpace();
+
         String res = "";
         res += parseFactor();
-        consumeSpace();
+
 
         String here = input.substring(cursor);
         if(here.startsWith("&&")){
             res += " &&";
             cursor += 2;
-            consumeSpace();
+
             res += parseFactor();
         }else if(here.startsWith("&")){
             res += " &";
             cursor += 1;
-            consumeSpace();
+
             res += parseFactor();
         }else if(here.startsWith("||")){
             res += " ||";
             cursor += 2;
-            consumeSpace();
+
             res += parseFactor();
         }else if(here.startsWith(" |")){
             res += " |";
             cursor += 1;
-            consumeSpace();
+
             res += parseFactor();
         }
-        consumeSpace();
+
 
         return res;
     }
 
 
     public String parseFactor() throws Exception {
-        consumeSpace();
+
         char c = peek();
         if(isDigit(c)){
             String res = parseNumber();
@@ -474,10 +480,10 @@ public class MyCompiler {
                 return res;
             }else{
                 res += match('(');
-                consumeSpace();
+
                 if(peek() != ')'){
                     res += parseExpressionList();
-                    consumeSpace();
+
                 }
                 res += match(')');
                 return res;
@@ -598,7 +604,7 @@ public class MyCompiler {
             result += "continue";
             cursor += 8;
         }
-        consumeSpace();
+
 
 
         return result;
@@ -617,7 +623,10 @@ public class MyCompiler {
 
     public String match(char c) throws Exception{
         if(c == peek()){
+            if(jumpWhiteSpace) consumeSpace();
             cursor ++;
+            if(jumpWhiteSpace) consumeSpace();
+            System.out.println("match: " + c);
             return c+"";
         }else{
             throw new Exception("MisMatchedException: expect "+c+", but see "+peek()+".");
@@ -660,15 +669,21 @@ public class MyCompiler {
 
     public static void main(String[] args) {
 
-        String input = "7*5";
-
-        MyCompiler compiler = new MyCompiler(input);
 
         try {
-            String res = compiler.parseTerm();
-            System.out.println("\n\n\n\n" + res);
+            Path path = Paths.get("./src/test.txt");
+            List<String> inputs = Files.readAllLines(path);
+            String input = "";
+            for(int i = 0; i < inputs.size(); i++){
+                input += inputs.get(i) + "\n";
+            }
+            System.out.println(input);
+            MyCompiler compiler = new MyCompiler(input);
+            String res = compiler.parseStatement();
+            System.out.println("\n\n\n\n-----------------------------------------------------------\n" + res);
         }catch(Exception e){
             System.out.println("Throw expcetion: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }

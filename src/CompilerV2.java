@@ -1,5 +1,8 @@
 import com.sun.corba.se.impl.io.TypeMismatchException;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -29,6 +32,8 @@ public class CompilerV2 {
 
     Map<String, String> map;
 
+    boolean jumpWhiteSpace;
+
     public boolean isReserved(String word){
         for(int i = 0; i < RESERVED_WORDS.length; i++){
             if(RESERVED_WORDS[i].equals(word)){
@@ -54,6 +59,7 @@ public class CompilerV2 {
 
         this.output = "";
         this.map = new HashMap<>();
+        this.jumpWhiteSpace = true;
 
     }
 
@@ -77,22 +83,22 @@ public class CompilerV2 {
     }
 
     public String parseVariableDeclaration() throws Exception{
-        consumeSpace();
+
         boolean flag = true;
         String result = "";
         while(flag){
             try {
                 String type = parseType() + " ";
                 result += type;
-                consumeSpace();
+
 
                 result += parseToken();
 
-                consumeSpace();
+
                 if(peek() == '='){
                     result += " "+match('=') + " ";
 
-                    consumeSpace();;
+                    ;
                     result += parseExpression();
                 }
 
@@ -102,7 +108,7 @@ public class CompilerV2 {
                 flag = false;
             }
         }
-        System.out.println(result);
+//        System.out.println(result);
         return result;
     }
 
@@ -110,15 +116,15 @@ public class CompilerV2 {
         String result = "";
         result += parseType() + " ";
 
-        consumeSpace();
+
 
         result += parseToken();
 
-        consumeSpace();
+
         if(peek() == '='){
             String mid = " "+match('=') + " ";
 
-            consumeSpace();;
+            ;
             result = parseExpression() + mid + result;
         }
 
@@ -131,7 +137,7 @@ public class CompilerV2 {
 
 
     public String parseType() throws TypeMismatchException,Exception {
-        consumeSpace();
+
         String result = "";
         String here = input.substring(cursor);
         if(here.startsWith("int") || here.startsWith("char")){
@@ -144,7 +150,7 @@ public class CompilerV2 {
                 cursor += 3;
             }
 
-            consumeSpace();
+
 
             if(peek() == '*'){
                 while(peek() == '*'){
@@ -176,31 +182,31 @@ public class CompilerV2 {
     }
 
     public String parseParameter() throws Exception{
-        consumeSpace();
+
         String res = "";
         res += parseType() + " ";
-        consumeSpace();
+
         res += parseToken();
         return res;
     }
 
     public String parseParamList() throws Exception{
         String res = "";
-        consumeSpace();
+
         res += parseParameter();
-        consumeSpace();
+
         res += parseParamListTail();
         return res;
     }
 
     public String parseParamListTail() throws Exception{
         String res = "";
-        consumeSpace();
+
         if(peek() == ',') {
             res += match(',') + " ";
-            consumeSpace();
+
             res += parseParameter();
-            consumeSpace();
+
             res += parseParamListTail();
         }
         return res;
@@ -220,120 +226,129 @@ public class CompilerV2 {
         }else if(here.startsWith("return")){
             result += parseReturnStatement();
         }else{
+
             int now = cursor;
-            String typewrong = "UnsupportedTypeException.";
-            String usereserved = "Cannot use a reserved word as variable name.";
-            try{
-                parseType();
-                cursor = now;
+            try {
                 result += parseAssignment();
-            }catch(TypeMismatchException e){
-                if(e.getMessage().equals(typewrong)){
-                    cursor = now;
-                    result += parseGeneralFunctionCall();
-                }
+
+                return result;
+            }catch(Exception e){
+                e.printStackTrace();
+                System.out.println("+++++++++++++++++++++++");
+                cursor = now;
             }
 
+
+            result += parseGeneralFunctionCall();
+            result += match(';');
+
         }
+
+        output += result;
         return result;
     }
 
     public String parseStatementList() throws Exception{
         String res = "\t";
-        consumeSpace();
+
         res += parseStatement() + "\n\t";
-        consumeSpace();
+
         res += parseStatementListTail();
         return res;
     }
 
     public String parseStatementListTail() throws Exception{
         String res = "";
-        consumeSpace();
+
         if(peek() != ')' && peek() != '}' && peek() != ']'){
             res += parseStatement() + "\n\t";
-            consumeSpace();
+
             res += parseStatementListTail();
         }
         return res;
     }
 
     public String parseBlockStatements() throws Exception{
-        consumeSpace();
+
         String res = "";
         res += match('{') + "\n\t";
-        consumeSpace();
+
         res += parseStatementList();
-        consumeSpace();
+
         res += "\n"+match('}')+"\n";
         return res;
     }
 
     public String parseAssignment() throws Exception{
-        consumeSpace();
+
         String result = "";
 
         if(isLegal(peek())){
             result += parseToken() + " ";
-            consumeSpace();
+
             if(peek() == '=') {
                 result += match('=') + " ";
-                consumeSpace();
                 result += parseExpression();
-                consumeSpace();
-
+                result += match(';');
+                output += result;
+                return result;
             }else{
                 String here = input.substring(cursor);
                 if(here.startsWith("*=") || here.startsWith("+=") || here.startsWith("-=") || here.startsWith("/=") || here.startsWith("%=") ){
                     result += " " + freeMatch();
                     result += freeMatch() + " ";
-                    consumeSpace();
+
                     result += parseExpression();
+                    output += result;
+                    return result;
                 }else if(here.startsWith("++") || here.startsWith("--")){
                     result += " " + freeMatch() + freeMatch() + " ";
-                    consumeSpace();
+                    output += result;
+                    return result;
                 }
             }
         }else{
             if(peek() == '+'){
                 result += match('+') + match('+') + parseToken();
+                output += result;
+                return result;
             }else if(peek() == '-'){
                 result += match('-') + match('-') + parseToken();
-            }else{
-                throw new Exception("Wrong Assignment.");
+                output += result;
+                return result;
             }
         }
 
-
-        return result;
+        throw new Exception("Wrong Assignment.");
     }
 
     public String parseGeneralFunctionCall() throws Exception{
         String res = "";
-        consumeSpace();
+
         res += parseToken();
-        consumeSpace();
+
         res += match('(');
-        consumeSpace();
+
         res += parseExpressionList();
-        consumeSpace();
+
         res += match(')');
-        consumeSpace();
-        res += match(';');
+
+
+        output += res;
         return res;
     }
 
     public String parseWhileStatement() throws Exception{
-        consumeSpace();
+
         String here = input.substring(cursor);
         String res = "";
         if(here.startsWith("while")){
             res += parseReservedWord();
-            consumeSpace();
+
             res += match('(');
-            consumeSpace();
+
             res += parseExpression();
-            consumeSpace();
+
             res += match(')');
             res += parseBlockStatements();
             return res;
@@ -347,15 +362,15 @@ public class CompilerV2 {
         String here = input.substring(cursor);
         String res = "";
         if(here.startsWith("for")){
-            consumeSpace();
+
             res += match('(');
-            consumeSpace();
+
             res += parseAssignment();
-            consumeSpace();
+
             res += parseConditionalExpression();
-            consumeSpace();
+
             res += parseAssignment();
-            consumeSpace();
+
             res += parseBlockStatements();
             return res;
         }else{
@@ -367,26 +382,26 @@ public class CompilerV2 {
     public String parseIfStatement() throws Exception{
         String result = "";
         String here = input.substring(cursor);
-        consumeSpace();
+
         if(here.startsWith("if")){
 
             result += parseReservedWord();
 
-            consumeSpace();
+
             result += match('(');
-            consumeSpace();
+
             result += parseExpression();
-            consumeSpace();
+
             result += match(')');
-            consumeSpace();
+
             result += parseBlockStatements();
-            consumeSpace();
+
             here = input.substring(cursor);
             if(here.startsWith("else")){
                 result += parseReservedWord();
-                consumeSpace();
+
                 result += parseBlockStatements();
-                consumeSpace();
+
             }
         }else{
             throw new Exception("fail to parse If.");
@@ -396,17 +411,17 @@ public class CompilerV2 {
     }
 
     public String parseReturnStatement() throws Exception{
-        consumeSpace();
+
         String result = "";
         String here = input.substring(cursor);
         if(here.startsWith("return")){
             result += parseReservedWord();
-            consumeSpace();
+
             if(peek() != ';'){
                 result += parseExpression();
             }
             result += match(';');
-            consumeSpace();
+
             return result;
         }else{
             throw new Exception("Wrong Return Call.");
@@ -415,14 +430,14 @@ public class CompilerV2 {
 
 
     public String parseBreakStatement() throws Exception{
-        consumeSpace();
+
         String result = "";
         String here = input.substring(cursor);
         if(here.startsWith("break")){
             result += parseReservedWord();
-            consumeSpace();
+
             result += match(';');
-            consumeSpace();
+
             return result;
         }else{
             throw new Exception("Wrong Break Call.");
@@ -430,14 +445,14 @@ public class CompilerV2 {
     }
 
     public String parseContinueStatement() throws Exception{
-        consumeSpace();
+
         String result = "";
         String here = input.substring(cursor);
         if(here.startsWith("continue")){
             result += parseReservedWord();
-            consumeSpace();
+
             result += match(';');
-            consumeSpace();
+
             return result;
         }else{
             throw new Exception("Wrong Continue Call.");
@@ -456,7 +471,7 @@ public class CompilerV2 {
 
 
     public String parseMetaStatement() throws Exception{
-        consumeSpace();
+
 
         String result = "";
         char c = peek();
@@ -502,17 +517,18 @@ public class CompilerV2 {
 
     public String parseExpression() throws Exception{
         String res = "";
-        consumeSpace();
+
         if(peek() != '"'){
 
             parseTerm();
-            consumeSpace();
+
             parseExpressionTail();
 
             return exp.peek();
         }else{
             res += parseString();
         }
+
         return res;
     }
 
@@ -524,17 +540,18 @@ public class CompilerV2 {
 
             result += c;
             ops.push(c);
-            cursor ++;
-            consumeSpace();
+            freeMatch();
+
 
             String term = parseTerm();
             String right = exp.pop();
             String left = exp.pop();
 
+
             String notation = PREFIX + count++ + POSTFIX;
             exp.push(notation);
             char tok = ops.pop();
-            System.out.println(notation + " = " + left + " " + tok + " " + right +";");
+//            System.out.println(notation + " = " + left + " " + tok + " " + right +";");
             output += notation + " = " + left + " " + tok + " " + right +";\n";
             String tail = parseExpressionTail();
 //            exp.push(term);
@@ -550,7 +567,7 @@ public class CompilerV2 {
 
     public String parseConditionalExpression() throws Exception{
         String res = "";
-        consumeSpace();
+
         if(peek() == '!'){
             res += match('!');
             res += parseConditionalExpression();
@@ -565,7 +582,7 @@ public class CompilerV2 {
 
     public String parseConditionOp(){
         String res = "";
-        consumeSpace();
+
         String here = input.substring(cursor);
         for(int i = 0; i < COND_OPS.length; i++){
             String op = COND_OPS[i];
@@ -580,7 +597,7 @@ public class CompilerV2 {
 
     public String parseConditionalExpressionTail() throws Exception{
         String res = "";
-        consumeSpace();
+
 
         String here = input.substring(cursor);
         if(here.startsWith("&&")){
@@ -595,9 +612,9 @@ public class CompilerV2 {
         }else if(here.startsWith(" |")){
             cursor += 1;
         }
-        consumeSpace();
+
         res += parseFactor();
-        consumeSpace();
+
         res += parseConditionalExpressionTail();
 
         return res;
@@ -607,12 +624,12 @@ public class CompilerV2 {
 
     public String parseExpressionList() throws Exception{
         String res = "";
-        consumeSpace();
+
         if(peek() == ')'){
             return "";
         }
         res += parseExpression();
-        consumeSpace();
+
         res += parseExpressionListTail();
 
         return res;
@@ -620,12 +637,12 @@ public class CompilerV2 {
 
     public String parseExpressionListTail() throws Exception{
         String res = "";
-        consumeSpace();
+
         if(peek() == ','){
             res += match(',') + " ";
-            consumeSpace();
+
             res += parseExpression();
-            consumeSpace();
+
             res += parseExpressionListTail();
         }
         return res;
@@ -651,7 +668,7 @@ public class CompilerV2 {
         if(c == '*' || c == '/' || c == '%'){
             result += c;
             ops.push(c);
-            cursor ++;
+            freeMatch();
             String factor = parseFactor();
 
             String right = exp.pop();
@@ -660,7 +677,7 @@ public class CompilerV2 {
             String equationleft = PREFIX + count++ + POSTFIX;
             exp.push(equationleft);
             char tok = ops.pop();
-            System.out.println(equationleft + " = " + left + " " + tok + " " + right +";");
+//            System.out.println(equationleft + " = " + left + " " + tok + " " + right +";");
             output += equationleft + " = " + left + " " + tok + " " + right +";\n";
             String tail = parseTermTail();
 
@@ -675,41 +692,41 @@ public class CompilerV2 {
     }
 
     public String parseSingleCondition() throws Exception{
-        consumeSpace();
+
         String res = "";
         res += parseFactor();
-        consumeSpace();
+
 
         String here = input.substring(cursor);
         if(here.startsWith("&&")){
             res += " &&";
             cursor += 2;
-            consumeSpace();
+
             res += parseFactor();
         }else if(here.startsWith("&")){
             res += " &";
             cursor += 1;
-            consumeSpace();
+
             res += parseFactor();
         }else if(here.startsWith("||")){
             res += " ||";
             cursor += 2;
-            consumeSpace();
+
             res += parseFactor();
         }else if(here.startsWith(" |")){
             res += " |";
             cursor += 1;
-            consumeSpace();
+
             res += parseFactor();
         }
-        consumeSpace();
+
 
         return res;
     }
 
 
     public String parseFactor() throws Exception {
-        consumeSpace();
+
         char c = peek();
 
         if(isDigit(c)){
@@ -719,7 +736,7 @@ public class CompilerV2 {
 //            return res;
             String notation = "local["+ count++ +"]";
             exp.push(notation);
-            System.out.println( notation + " = " + res+";");
+//            System.out.println( notation + " = " + res+";");
             this.output += notation + " = " + res+";\n";
             return notation;
 
@@ -727,30 +744,37 @@ public class CompilerV2 {
 
 
             String res = parseToken();
-            consumeSpace();
+//
             if(peek() != '('){
+                output += res;
                 return res;
             }else{
                 res += match('(');
-                consumeSpace();
+
                 if(peek() != ')'){
                     res += parseExpressionList();
-                    consumeSpace();
+
                 }
                 res += match(')');
+
+
+
+                output += augmentArray() + " = " + res;
+
                 return res;
             }
+
 
 
         }else if(c == '('){
 
 
             String result = "(";
-            cursor++;
+            freeMatch();
             result += parseExpression();
             c = peek();
             if(c == ')'){
-                cursor++;
+                freeMatch();
                 return result + ")";
             }else{
                 throw new Exception("FactorFormatException: a ) is anticipated.");
@@ -785,14 +809,12 @@ public class CompilerV2 {
     public String parseToken() throws Exception{
         String result = "";
         if(isLetter(peek())){
-            result += peek();
-            cursor++;
+            result += freeMatch();
         }else{
             throw new Exception("TokenFormatException");
         }
         while(isLegal(peek()) && cursor < input.length()){
-            result += peek();
-            cursor ++;
+            result += freeMatch();
         }
         if(isReserved(result)){
             throw new Exception("Cannot use a reserved word as variable name.");
@@ -809,8 +831,7 @@ public class CompilerV2 {
         while(cursor < input.length()){
 
             if(isDigit(peek())){
-                result += peek();
-                cursor ++;
+                result += freeMatch();
             }else{
                 break;
             }
@@ -859,7 +880,7 @@ public class CompilerV2 {
             result += "continue";
             cursor += 8;
         }
-        consumeSpace();
+
 
 
         return result;
@@ -877,24 +898,28 @@ public class CompilerV2 {
     }
 
     public String match(char c) throws Exception{
+
+        if(jumpWhiteSpace) consumeSpace();
         if(c == peek()){
             cursor ++;
+            if(jumpWhiteSpace) consumeSpace();
+            System.out.println("match: " + c);
             return c+"";
         }else{
             throw new Exception("MisMatchedException: expect "+c+", but see "+peek()+".");
         }
     }
 
-    public String freeMatch(){
-        String c = peek() + "";
-        cursor ++ ;
+    public String freeMatch() throws Exception{
+        System.out.print("free ");
+        String c = match(peek());
         return c;
     }
 
     public void consumeSpace(){
         char c = peek();
         while(c == ' ' || c == '\n' || c == '\t'){
-            freeMatch();
+            cursor ++ ;
             c = peek();
         }
     }
@@ -915,6 +940,10 @@ public class CompilerV2 {
         return c >= 48 && c <= 57;
     }
 
+    public String augmentArray(){
+        return PREFIX + count++ + POSTFIX;
+    }
+
 
 
 
@@ -924,19 +953,32 @@ public class CompilerV2 {
         double[] local = new double[1000];
 
 
-        String input = "calculate(1123+2-3*4-5);";
 
 
-        CompilerV2 compiler = new CompilerV2(input);
 
 
-        try {
-            System.out.println(compiler.parseStatement());
+
+        try{
+
+
+            Path path = Paths.get("./src/test.txt");
+            List<String> inputs = Files.readAllLines(path);
+            String input = "";
+            for(int i = 0; i < inputs.size(); i++){
+                input += inputs.get(i) + "\n";
+            }
+            CompilerV2 compiler = new CompilerV2(input);
+            System.out.println(input);
+            String output = compiler.parseStatement();
+            System.out.println("------------------------------------------------");
+            System.out.println(compiler.output);
+
 
 
 
         }catch(Exception e){
             System.out.println("Throw expcetion: " + e.getMessage());
+            e.printStackTrace();
         }
 
 
